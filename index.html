@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>ML Predictor</title>
+</head>
+<body>
+
+<h2>Breast Cancer Prediction</h2>
+
+<textarea id="features" rows="4" cols="60"
+placeholder="Paste 30 comma-separated numbers"></textarea>
+<br><br>
+
+<button onclick="predict('logistic')">Logistic</button>
+<button onclick="predict('tree')">Decision Tree</button>
+
+<p id="result"></p>
+
+<script>
+async function predict(model) {
+  const features = document.getElementById("features")
+    .value.split(",").map(Number);
+
+  const res = await fetch(`/predict/${model}`, {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({features})
+  });
+
+  const data = await res.json();
+  document.getElementById("result").innerText =
+    "Prediction: " + data.prediction;
+}
+</script>
+
+</body>
+</html>
